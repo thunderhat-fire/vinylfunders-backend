@@ -20,4 +20,16 @@ const projectSchema = new mongoose.Schema({
 
 const Project = mongoose.model("Project", projectSchema);
 
-module.exports = { User, Project };
+const songSchema = new mongoose.Schema({
+  ownerId: { type: String, required: true },
+  projectId: { type: String, required: true },
+  songId: { type: String, required: true },
+  fileName: { type: String, required: true },
+  mimeType: { type: String, required: true },
+  title: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+});
+
+const Song = mongoose.model("Song", songSchema);
+
+module.exports = { User, Project, Song };
