@@ -8,7 +8,7 @@ app.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const data = await User.findOne({ id: id });
-    data ? res.status(200).send(data) : res.status(400).send("User not found");
+    data ? res.status(200).send(data) : res.status(200).send({});
   } catch (err) {
     res.status(500).send(err);
   }
@@ -16,15 +16,16 @@ app.get("/:id", async (req, res) => {
 //create new user
 app.post("/", async (req, res) => {
   try {
-    const { username, name, email, password } = req.body;
+    const { username, name, email, googleId, address, phone } = req.body;
     const count = await User.countDocuments();
     const uniqueId = count + nanoid();
     const newUser = new User({
       username,
       name,
       email,
-      password,
-      id: uniqueId,
+      address,
+      phone,
+      id: googleId,
     });
     console.log(newUser);
     //error codes
