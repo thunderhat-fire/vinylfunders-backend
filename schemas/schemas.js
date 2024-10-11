@@ -17,6 +17,7 @@ const projectSchema = new mongoose.Schema({
   ownerId: { type: String, required: true },
   projectId: { type: String, required: true },
   name: { type: String, required: true },
+  text: { type: String, required: true },
 });
 
 const Project = mongoose.model("Project", projectSchema);
@@ -25,6 +26,7 @@ const songSchema = new mongoose.Schema({
   ownerId: { type: String, required: true },
   projectId: { type: String, required: true },
   songId: { type: String, required: true },
+  streamId: { type: String, required: true },
   fileName: { type: String, required: true },
   mimeType: { type: String, required: true },
   title: { type: String, required: true },

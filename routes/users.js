@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express.Router();
-const { nanoid } = require("nanoid");
+const getAuth0Token = require("../utils/getAuth0Token");
 const { User } = require("../schemas/schemas");
 const removeEmptyFields = require("../utils/utils");
 //get user details
@@ -18,7 +18,7 @@ app.post("/", async (req, res) => {
   try {
     const { username, name, email, googleId, address, phone } = req.body;
     const count = await User.countDocuments();
-    const uniqueId = count + nanoid();
+
     const newUser = new User({
       username,
       name,
@@ -33,7 +33,7 @@ app.post("/", async (req, res) => {
     //
     const response = await newUser.save();
 
-    res.status(200).send(`New user with ID ${uniqueId} created`);
+    res.status(200).send(`New user with ID ${googleId} created`);
   } catch (err) {
     res.status(500).send(err);
   }
@@ -63,13 +63,31 @@ app.put("/:id", async (req, res) => {
 app.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("delete ID ran", id);
     const data = await User.findOne({ id });
+    console.log(data);
     if (!data) {
       res.status(400).send("User not found");
       return;
     }
+    //remove from our DB
     const response = await User.deleteOne({ id });
-    res.send("User deleted");
+    //remove from auth0
+
+    ///FIX THIS AT A LATER DATE - NON ESSENTIAL CURRENTLY
+    // const token = getAuth0Token();
+    // console.log("token", token);
+    // const options = {
+    //   method: "DELETE",
+    //   url: `https://login.auth0.com/api/v2/users/:${id}`,
+    //   headers: {
+    //     "content-type": "application/json",
+    //     authorization: `Bearer ${token}`,
+    //   },
+    // };
+    // const deleted = await axios.request(options);
+
+    res.status(200).send("User deleted");
     //delete bands and projects code
   } catch (err) {
     res.status(500).send(err);
