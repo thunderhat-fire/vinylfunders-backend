@@ -43,6 +43,7 @@ mongoose.connection.once("open", () => {
 app.use("/users", require("./routes/users"));
 app.use("/projects", require("./routes/projects"));
 app.use("/songs", require("./routes/songs"));
+app.use("/mapping", require("./routes/mapping"));
 
 app.listen(process.env.PORT || 6001, () => {
   console.log("server running");

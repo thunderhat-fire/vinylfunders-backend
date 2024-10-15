@@ -22,5 +22,5 @@ const getAuth0Token = () => {
       console.error(error);
     });
 };
-getAuth0Token();
+// getAuth0Token();
 module.exports = getAuth0Token;

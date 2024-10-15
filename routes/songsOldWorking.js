@@ -13,7 +13,7 @@ const upload = multer({ storage });
 
 //set up file retrieval
 
-app.post("/", upload.array("audioFiles", 20), async (req, res) => { // 20 is max amount of files allowed to upload
+app.post("/", upload.single("songFile"), async (req, res) => {
   const gridfsBucket = req.app.locals.gridfsBucket; // Access GridFS instance
 
   try {

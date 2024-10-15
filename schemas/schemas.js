@@ -32,6 +32,7 @@ const songSchema = new mongoose.Schema({
   title: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
+//songs retrieved via attached project id. Song id 
 
 const Song = mongoose.model("Song", songSchema);
 
