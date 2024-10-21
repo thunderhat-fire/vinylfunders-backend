@@ -1,4 +1,4 @@
-var axios = require("axios").default;
+var axios = require("axios").defaults;
 const getAuth0Token = () => {
   var options = {
     method: "POST",

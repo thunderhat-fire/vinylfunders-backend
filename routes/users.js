@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express.Router();
-const getAuth0Token = require("../utils/getAuth0Token");
+// const getAuth0Token = require("../utils/getAuth0Token");
 const { User } = require("../schemas/schemas");
 const removeEmptyFields = require("../utils/utils");
 //get user details
