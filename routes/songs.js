@@ -13,15 +13,18 @@ const upload = multer({ storage });
 
 //set up file retrieval
 
-app.post("/", upload.array("audioFiles", 20), async (req, res) => { // 20 is max amount of files allowed to upload
-  const gridfsBucket = req.app.locals.gridfsBucket; // Access GridFS instance
+app.post("/", upload.single("songFile"), async (req, res) => {
+  const gridfsSongBucket = req.app.locals.gridfsSongBucket; // Access GridFS instance
 
   try {
     if (!req.file) return res.status(400).send("No file uploaded.");
 
-    const uploadStream = gridfsBucket.openUploadStream(req.file.originalname, {
-      contentType: req.file.mimetype,
-    });
+    const uploadStream = gridfsSongBucket.openUploadStream(
+      req.file.originalname,
+      {
+        contentType: req.file.mimetype,
+      }
+    );
 
     const readableStream = Readable.from(req.file.buffer);
 
@@ -34,14 +37,19 @@ app.post("/", upload.array("audioFiles", 20), async (req, res) => { // 20 is max
       .on("finish", async () => {
         console.log("File uploaded successfully");
 
-        const { ownerId, projectId, title } = req.body;
+        const { ownerId, projectId, title, track, side, preview, length } =
+          req.body;
         const newSong = new Song({
-          ownerId: ownerId || "1",
-          projectId: projectId || "1",
+          ownerId: ownerId,
+          projectId: projectId,
           fileName: req.file.originalname,
           mimeType: req.file.mimetype,
           title: title || req.file.originalname,
           songId: uploadStream.id, // Use the ID from the upload stream
+          track,
+          side,
+          preview,
+          length,
         });
 
         await newSong.save();

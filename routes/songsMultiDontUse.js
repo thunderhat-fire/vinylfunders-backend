@@ -13,15 +13,19 @@ const upload = multer({ storage });
 
 //set up file retrieval
 
-app.post("/", upload.single("songFile"), async (req, res) => {
-  const gridfsBucket = req.app.locals.gridfsBucket; // Access GridFS instance
+app.post("/", upload.array("audioFiles", 20), async (req, res) => {
+  // 20 is max amount of files allowed to upload
+  const gridfsSongBucket = req.app.locals.gridfsSongBucket; // Access GridFS instance
 
   try {
     if (!req.file) return res.status(400).send("No file uploaded.");
 
-    const uploadStream = gridfsBucket.openUploadStream(req.file.originalname, {
-      contentType: req.file.mimetype,
-    });
+    const uploadStream = gridfsSongBucket.openUploadStream(
+      req.file.originalname,
+      {
+        contentType: req.file.mimetype,
+      }
+    );
 
     const readableStream = Readable.from(req.file.buffer);
 

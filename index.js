@@ -33,11 +33,19 @@ mongoose.connection.on("disconnected", () => {
 let gridfsBucket;
 
 mongoose.connection.once("open", () => {
-  gridfsBucket = new GridFSBucket(mongoose.connection.db, {
+  gridfsSongBucket = new GridFSBucket(mongoose.connection.db, {
     bucketName: "songUploads", // Optional custom bucket name
   });
+  gridfsImageBucket = new GridFSBucket(mongoose.connection.db, {
+    bucketName: "imageUploads", // Optional custom bucket name
+  });
+  gridfsThumbBucket = new GridFSBucket(mongoose.connection.db, {
+    bucketName: "thumbUploads", // Optional custom bucket name
+  });
   // Set gfs as a local variable so it's accessible in other parts of the app
-  app.locals.gridfsBucket = gridfsBucket;
+  app.locals.gridfsSongBucket = gridfsSongBucket;
+  app.locals.gridfsImageBucket = gridfsImageBucket;
+  app.locals.gridfsThumbBucket = gridfsThumbBucket;
 });
 //test route
 app.get("/ping", (req, res) => {
@@ -46,6 +54,7 @@ app.get("/ping", (req, res) => {
 //routes
 app.use("/users", require("./routes/users"));
 app.use("/projects", require("./routes/projects"));
+app.use("/images", require("./routes/images"));
 app.use("/songs", require("./routes/songs"));
 app.use("/mapping", require("./routes/mapping"));
 
