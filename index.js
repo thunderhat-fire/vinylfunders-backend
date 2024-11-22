@@ -5,60 +5,60 @@ const app = express();
 require("dotenv").config();
 app.use(express.json());
 app.use(cors());
-// const mongoose = require("mongoose");
-// const { GridFSBucket } = require("mongodb");
+const mongoose = require("mongoose");
+const { GridFSBucket } = require("mongodb");
 
-// // //mongoose set up
-// mongoose.connect(process.env.MONGO_URL, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
-// // Connection events
+// //mongoose set up
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+// Connection events
 
-// mongoose.connection.on("connected", () => {
-//   const dbName = mongoose.connection.db.databaseName;
-//   console.log(`Mongoose connected to MongoDB database: ${dbName}`);
-// });
+mongoose.connection.on("connected", () => {
+  const dbName = mongoose.connection.db.databaseName;
+  console.log(`Mongoose connected to MongoDB database: ${dbName}`);
+});
 
-// mongoose.connection.on("error", (err) => {
-//   console.error("Mongoose connection error:", err);
-// });
+mongoose.connection.on("error", (err) => {
+  console.error("Mongoose connection error:", err);
+});
 
-// mongoose.connection.on("disconnected", () => {
-//   console.log("Mongoose disconnected from MongoDB");
-// });
+mongoose.connection.on("disconnected", () => {
+  console.log("Mongoose disconnected from MongoDB");
+});
 
-// //init GridFS
+//init GridFS
 
-// let gridfsBucket;
+let gridfsBucket;
 
-// mongoose.connection.once("open", () => {
-//   gridfsSongBucket = new GridFSBucket(mongoose.connection.db, {
-//     bucketName: "songUploads", // Optional custom bucket name
-//   });
-//   gridfsImageBucket = new GridFSBucket(mongoose.connection.db, {
-//     bucketName: "imageUploads", // Optional custom bucket name
-//   });
-//   gridfsThumbBucket = new GridFSBucket(mongoose.connection.db, {
-//     bucketName: "thumbUploads", // Optional custom bucket name
-//   });
-//   // Set gfs as a local variable so it's accessible in other parts of the app
-//   app.locals.gridfsSongBucket = gridfsSongBucket;
-//   app.locals.gridfsImageBucket = gridfsImageBucket;
-//   app.locals.gridfsThumbBucket = gridfsThumbBucket;
-// });
+mongoose.connection.once("open", () => {
+  gridfsSongBucket = new GridFSBucket(mongoose.connection.db, {
+    bucketName: "songUploads", // Optional custom bucket name
+  });
+  gridfsImageBucket = new GridFSBucket(mongoose.connection.db, {
+    bucketName: "imageUploads", // Optional custom bucket name
+  });
+  gridfsThumbBucket = new GridFSBucket(mongoose.connection.db, {
+    bucketName: "thumbUploads", // Optional custom bucket name
+  });
+  // Set gfs as a local variable so it's accessible in other parts of the app
+  app.locals.gridfsSongBucket = gridfsSongBucket;
+  app.locals.gridfsImageBucket = gridfsImageBucket;
+  app.locals.gridfsThumbBucket = gridfsThumbBucket;
+});
 //test route
 app.get("/ping", (req, res) => {
   res.send("pong");
 });
 //routes
-// app.use("/users", require("./routes/users"));
-// app.use("/projects", require("./routes/projects"));
-// app.use("/images", require("./routes/images"));
-// app.use("/songs", require("./routes/songs"));
-// app.use("/mapping", require("./routes/mapping"));
-
-app.listen(process.env.PORT || 6001, () => {
+app.use("/users", require("./routes/users"));
+app.use("/projects", require("./routes/projects"));
+app.use("/images", require("./routes/images"));
+app.use("/songs", require("./routes/songs"));
+app.use("/mapping", require("./routes/mapping"));
+const PORT = process.env.PORT || 6001;
+app.listen(PORT, () => {
   console.log("server running");
 });
 
